@@ -18,6 +18,7 @@ run: `python3 rotary.py <filelocation>`
 The interpreter comes with the following files in `/examples/`:
 ```
 helloworld.rot - by Elisia:
+---------------------------
 A Basic Hello World program inspired by the brainfuck implementation
 ```
 
@@ -55,6 +56,7 @@ Each program includes:
 - The codecircles run counterclockwise starting from the third token along the top row
     - `!!!x!!` for example, where x is the first token
 - Codecircles must be structured exactly as **below** and have a one line gap between them
+- Any tokens outside of the circle will halt the program from running
 
 
 ```     
