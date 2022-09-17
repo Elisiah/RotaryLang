@@ -3,6 +3,9 @@
 # Title: Rotary Interpreter in Python
 # Language: Rotary 1.2 by User:InputUsername
 
+# TODO: Add CIRCP wrapping using modulo on n circles
+# TODO: change values to unsigned 0-255
+
 import random
 import sys
 
@@ -54,26 +57,29 @@ def programLoop(circles):
       elif token == ".":
          print(chr(tape[outp]), end="")
       elif token == ",":
-         tape[inpp] = ord(input("INPUT: "))
+         chrInp = input("INPUT: ")
+         if chrInp == "":
+            chrInp = "\n"
+         tape[inpp] = ord(chrInp)
       elif token == "v":
          cirp += 1
          if cirp >= len(circles):
-            print("\nERROR: circle pointer out of bounds")
+            print("\nERROR: circle pointer out of bounds " + str(cirp))
             sys.exit(1)
          instrPtr = -1 # reset instruction pointer
       elif token == "^":
          cirp -= 1
          if cirp < 0:
-            print("\nERROR: circle pointer out of bounds")
+            print("\nERROR: circle pointer out of bounds " + str(cirp))
             sys.exit(1)
          instrPtr = -1
       elif token == "#":
          print(tape[outp], end="\n")
       elif token == "?" and instrPtr != 33:               # if outp is not 0 skip next instr
-         if tape[outp] == 0:
-            instrPtr+=1
-      elif token == "*" and instrPtr != 33:              # if outp is not 0 skip next instr
          if tape[outp] != 0:
+            instrPtr+=1
+      elif token == "*" and instrPtr != 33:              # if outp is 0 skip next instr
+         if tape[outp] == 0:
             instrPtr+=1
       elif token == "$":
          stack.append(tape[outp])
@@ -97,7 +103,11 @@ def programLoop(circles):
             stack.append(n % tape[outp])
       elif token == "x":
          if len(stack) != 0:
-            cirp = stack.pop()
+            cirp = stack.pop() - 1
+            if cirp >= len(circles):
+               print("\nERROR: circle pointer out of bounds")
+               sys.exit(1)
+            instrPtr = -1
 
       # Simulate infinite tape
       if inpp not in tape:
